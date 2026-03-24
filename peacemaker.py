@@ -8,7 +8,7 @@ import os
 import io
 
 # ================= CONFIG =================
-API_KEY = "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"  # set this in env
+API_KEY = st.secrets["API_KEY"]  # set this in env
 ASR_MODEL = "openai/whisper-large-v3-turbo"
 LLM_MODEL = "mistralai/Mistral-7B-Instruct-v0.2"
 
