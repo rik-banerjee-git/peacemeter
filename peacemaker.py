@@ -239,35 +239,24 @@ STRICT RULES:
 ==================== REQUIRED OUTPUT FORMAT ====================
 
 ## 1. Predicted Environment
-Give the most likely environment category and a short one-line summary.
+- Give TOP 3 probable environments
+- Include probability % (must sum ~100)
+- Each prediction must reference 1–2 metrics
 
-## 2. Probability Breakdown
-Provide 3 to 5 likely environments with probabilities that sum to 100%.
-Example:
-- Traffic road — 45%
-- Vehicle cabin — 25%
-- Office — 15%
-- Fan / AC room — 10%
-- Quiet indoor room — 5%
-
-## 3. Why This Prediction Was Made
+## 2. Why This Prediction Was Made
 For each environment in the probability breakdown, explain:
 - which metrics support it
 - what those metrics mean in real-world sound terms
-- why it is more or less likely than the others
 
-## 4. Noise Characterization
-Explain the sound in practical terms:
-- steady or fluctuating
-- tonal or random
-- sharp or dull
-- impulsive or continuous
-- low-frequency heavy or high-frequency heavy
-- human-voice-like or machinery-like or nature-like
+## 3.Noise Behavior
+- Stable vs fluctuating (use variance/std)
+- Spikes or smooth (use crest/kurtosis)
+- Tonal vs random (use spectral + ZCR)
 
-## 5. Human Comfort & Perception
+## 4. Human Comfort & Perception
 Explain how a typical person would perceive this environment:
 - calm / moderate / distracting / stressful / harsh
+- Link to dB + spectral features
 - likely effect on concentration, comfort, and fatigue
 
 ## 6. Risk / Impact Assessment
@@ -276,44 +265,31 @@ Classify the environment as:
 - Moderate
 - Noisy
 - Potentially harmful
+- Based on dB + variability
 
-Also explain likely long-exposure impact:
-- focus
-- stress
-- hearing comfort
-- annoyance
-- fatigue
+## 7. Irritation Score (1–10)
+- Score + reason using metrics
 
-## 7. Key Metric-to-Meaning Mapping
-Provide a point-by-point table or bullet list that maps:
-- metric value → interpretation → what it suggests about the environment
+## 8. Key Insights
+- 3–5 sharp observations
+- Each must reference a metric
 
 Example style:
 - High high-frequency energy → hiss / alarms / speech / traffic texture → suggests traffic, crowd, machinery, or outdoor noise
 - High low-frequency energy → engine / AC / fan / vehicle hum → suggests vehicle cabin, traffic, industrial room, or AC room
 
-## 8. Practical Recommendations
+## 9. Practical Recommendations
 Give specific, useful advice based on the inferred environment:
 - if it is a room: soundproofing / fan placement / window sealing
 - if it is outdoors: expected source and mitigation
 - if it is a vehicle: cabin noise expectations
 - if it is a workplace: acoustic comfort improvements
 
-## 9. Final Verdict
+## 10. Final Verdict
 End with a strong 2–3 sentence conclusion that states:
 - the most likely environment
 - the confidence level
 - the main evidence behind the prediction
-
-You must explicitly connect conclusions to metrics such as:
-- dB and RMS for loudness
-- Peak and Crest Factor for sudden spikes / impulsive events
-- Kurtosis for shock-like events such as honks or slams
-- Skewness for asymmetry in sound distribution
-- ZCR for sharp or noisy behavior
-- Spectral Centroid for brightness / hiss / high-frequency dominance
-- Bandwidth for spread of frequencies
-- Low / Mid / High energy for likely source type
 
 STYLE REQUIREMENTS:
 - Use clear headings
