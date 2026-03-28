@@ -7,6 +7,10 @@ import requests
 import os
 import io
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+import plotly.express as px
+from scipy.signal import spectrogram
+
 
 # ================= CONFIG =================
 API_KEY = st.secrets["API_KEY"]
@@ -102,24 +106,68 @@ def advanced_noise_analysis(data, sr):
     }
 
 # ================= VISUALS =================
-def plot_waveform(data):
-    fig, ax = plt.subplots()
-    ax.plot(data)
-    ax.set_title("Waveform")
-    st.pyplot(fig)
 
-def plot_fft(data):
+def plot_waveform(data):
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        y=data,
+        mode='lines',
+        name='Waveform'
+    ))
+
+    fig.update_layout(
+        title="🌊 Audio Waveform",
+        xaxis_title="Time",
+        yaxis_title="Amplitude",
+        template="plotly_dark",
+        height=300
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+def plot_fft(data, sr):
     fft = np.abs(np.fft.fft(data))
-    fig, ax = plt.subplots()
-    ax.plot(fft[:len(fft)//2])
-    ax.set_title("FFT Spectrum")
-    st.pyplot(fig)
+    freqs = np.fft.fftfreq(len(fft), 1/sr)
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=freqs[:len(freqs)//2],
+        y=fft[:len(fft)//2],
+        mode='lines',
+        name='FFT'
+    ))
+
+    fig.update_layout(
+        title="📊 Frequency Spectrum (FFT)",
+        xaxis_title="Frequency (Hz)",
+        yaxis_title="Magnitude",
+        template="plotly_dark",
+        height=300
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
 
 def plot_spectrogram(data, sr):
-    fig, ax = plt.subplots()
-    ax.specgram(data, Fs=sr)
-    ax.set_title("Spectrogram")
-    st.pyplot(fig)
+    f, t, Sxx = spectrogram(data, sr)
+
+    fig = px.imshow(
+        10 * np.log10(Sxx + 1e-10),
+        aspect='auto',
+        origin='lower',
+        labels=dict(x="Time", y="Frequency", color="Intensity (dB)"),
+    )
+
+    fig.update_layout(
+        title="🔥 Spectrogram (Time-Frequency Analysis)",
+        template="plotly_dark",
+        height=350
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 # ================= AI NOISE REPORT =================
 def noise_report(metrics):
@@ -324,10 +372,13 @@ with col2:
         st.metric("dB", f"{metrics['db']:.2f}")
 
         # Graphs
-        plot_waveform(metrics["data"])
-        plot_fft(metrics["data"])
-        plot_spectrogram(metrics["data"], metrics["sr"])
-
+        st.subheader("📊 Visual Audio Insights")
+        col1, col2 = st.columns(2)
+        with col1:
+            plot_waveform(metrics["data"])
+            plot_fft(metrics["data"],metrics["sr"])
+        with col2:
+            plot_spectrogram(metrics["data"], metrics["sr"])
         with st.spinner("Generating AI Report..."):
             report = noise_report(metrics)
 
