@@ -4,3 +4,5 @@ soundfile
 huggingface_hub
 requests
 matplotlib
+plotly
+signal
