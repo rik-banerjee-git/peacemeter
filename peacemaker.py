@@ -124,42 +124,84 @@ def plot_spectrogram(data, sr):
 # ================= AI NOISE REPORT =================
 def noise_report(metrics):
     prompt = f"""
-You are a world-class acoustic AI expert.
+You are a world-class acoustic scientist and environmental AI expert.
 
-Analyze deeply:
+You MUST produce a highly detailed, non-generic, data-driven report.
 
-Core:
-- dB: {metrics['db']}
-- RMS: {metrics['rms']}
-- Peak: {metrics['peak']}
-- Crest: {metrics['crest']}
+Use the metrics below and INTERPRET them like a real expert — do NOT just describe them.
 
-Statistical:
-- Variance: {metrics['variance']}
-- Std: {metrics['std']}
-- Kurtosis: {metrics['kurtosis']}
-- Skewness: {metrics['skew']}
+==================== INPUT METRICS ====================
 
-Temporal:
-- ZCR: {metrics['zcr']}
+🔊 Loudness:
+- dB: {metrics['db']:.2f}
+- RMS: {metrics['rms']:.6f}
+- Peak: {metrics['peak']:.6f}
+- Crest Factor: {metrics['crest']:.2f}
 
-Frequency:
-- Centroid: {metrics['centroid']}
-- Bandwidth: {metrics['bandwidth']}
-- Low/Mid/High: {metrics['low']}, {metrics['mid']}, {metrics['high']}
+📊 Stability:
+- Variance: {metrics['variance']:.6f}
+- Std Dev: {metrics['std']:.6f}
+- Kurtosis: {metrics['kurtosis']:.2f}
+- Skewness: {metrics['skew']:.2f}
 
-Peace Score: {metrics['peace']}
+⚡ Temporal:
+- ZCR: {metrics['zcr']:.4f}
 
-Give EXTREMELY DETAILED:
+🎼 Frequency:
+- Spectral Centroid: {metrics['centroid']:.2f}
+- Bandwidth: {metrics['bandwidth']:.2f}
+- Low (20–250 Hz): {metrics['low']:.2f}
+- Mid (250–2k Hz): {metrics['mid']:.2f}
+- High (2k+ Hz): {metrics['high']:.2f}
 
-1. Environment Type (home/office/traffic/nature etc.)
-2. Noise Source Probability
-3. Acoustic Behavior Explanation
-4. Human Comfort Analysis
-5. Health Risk Level
-6. Irritation Level
-7. Improvement Suggestions
-8. Final Verdict (Professional tone)
+🌿 Peace Score: {metrics['peace']:.2f}/100
+
+=======================================================
+
+🚨 STRICT INSTRUCTIONS:
+
+- DO NOT be generic
+- DO NOT repeat numbers without meaning
+- ALWAYS explain WHAT the numbers imply in real life
+- Use real-world analogies (traffic, AC, office, nature, etc.)
+- Be confident and specific
+
+=======================================================
+
+🎯 OUTPUT FORMAT (MANDATORY):
+
+## 🧠 1. Environment Classification
+- Identify environment (e.g., quiet room, traffic road, office, construction, nature)
+- Give probability breakdown (e.g., 70% traffic, 20% human, 10% machinery)
+
+## 🔊 2. Noise Behavior Analysis
+- Explain:
+  - Is it steady or fluctuating?
+  - Are there sudden spikes?
+  - Is it tonal (fan/AC) or random (crowd)?
+
+## 👂 3. Human Comfort & Perception
+- How a human would FEEL in this environment
+- Is it relaxing, distracting, stressful?
+
+## ⚠️ 4. Risk & Health Impact
+- Safe / Moderate / Harmful
+- Long exposure impact (focus, hearing, stress)
+
+## 😖 5. Irritation & Annoyance Level
+- Score from 1–10
+- Explain WHY
+
+## 🔍 6. Key Observations (Important)
+- Highlight 3–5 critical insights from the data
+
+## 💡 7. Improvement Recommendations
+- Practical steps (soundproofing, white noise, relocation, etc.)
+
+## 🏁 8. Final Verdict
+- 2–3 line strong professional conclusion
+
+=======================================================
 """
 
     completion = client.chat.completions.create(
