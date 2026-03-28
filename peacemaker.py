@@ -123,7 +123,7 @@ def plot_spectrogram(data, sr):
 
 # ================= AI NOISE REPORT =================
 def noise_report(metrics):
-prompt = f"""
+    prompt = f"""
 You are an elite environmental acoustics analyst and sound intelligence expert.
 
 Your task is to infer the most likely environment from the audio metrics below and explain the inference in a rigorous, evidence-based way.
@@ -274,7 +274,7 @@ STYLE REQUIREMENTS:
 - Make it feel like a premium AI acoustic report
 - Avoid boilerplate language
 """
-prompt = f"""
+    prompt = f"""
 Context: This is an environment sound analysis app. The goal is to predict the environment category from audio features and explain the prediction with metric-based evidence.
 
 {prompt}
