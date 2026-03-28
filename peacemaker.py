@@ -15,7 +15,8 @@ from scipy.signal import spectrogram
 # ================= CONFIG =================
 API_KEY = st.secrets["API_KEY"]
 ASR_MODEL = "openai/whisper-large-v3-turbo"
-LLM_MODEL = "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"
+#LLM_MODEL = "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"
+LLM_MODEL="DrNicefellow/Mistral-1-from-Mixtral-8x7B-v0.1"
 
 client = InferenceClient(api_key=API_KEY)
 
