@@ -123,87 +123,162 @@ def plot_spectrogram(data, sr):
 
 # ================= AI NOISE REPORT =================
 def noise_report(metrics):
-    prompt = f"""
-You are a world-class acoustic scientist and environmental AI expert.
+prompt = f"""
+You are an elite environmental acoustics analyst and sound intelligence expert.
 
-You MUST produce a highly detailed, non-generic, data-driven report.
+Your task is to infer the most likely environment from the audio metrics below and explain the inference in a rigorous, evidence-based way.
 
-Use the metrics below and INTERPRET them like a real expert — do NOT just describe them.
+You MUST:
+- predict the environment type with probabilities that sum to 100%
+- explain WHY each predicted environment is likely
+- explicitly map each conclusion to the metrics that support it
+- avoid generic statements
+- avoid repeating numbers without interpretation
+- be specific, confident, and practical
+- clearly separate observations, inference, and recommendations
 
 ==================== INPUT METRICS ====================
 
-🔊 Loudness:
+🔊 Loudness / Energy
 - dB: {metrics['db']:.2f}
 - RMS: {metrics['rms']:.6f}
 - Peak: {metrics['peak']:.6f}
 - Crest Factor: {metrics['crest']:.2f}
 
-📊 Stability:
+📊 Statistical Shape
 - Variance: {metrics['variance']:.6f}
 - Std Dev: {metrics['std']:.6f}
 - Kurtosis: {metrics['kurtosis']:.2f}
 - Skewness: {metrics['skew']:.2f}
 
-⚡ Temporal:
-- ZCR: {metrics['zcr']:.4f}
+⚡ Temporal Behavior
+- Zero Crossing Rate (ZCR): {metrics['zcr']:.4f}
 
-🎼 Frequency:
+🎼 Frequency Profile
 - Spectral Centroid: {metrics['centroid']:.2f}
-- Bandwidth: {metrics['bandwidth']:.2f}
-- Low (20–250 Hz): {metrics['low']:.2f}
-- Mid (250–2k Hz): {metrics['mid']:.2f}
-- High (2k+ Hz): {metrics['high']:.2f}
+- Spectral Bandwidth: {metrics['bandwidth']:.2f}
+- Low Frequency Energy (20–250 Hz): {metrics['low']:.2f}
+- Mid Frequency Energy (250–2000 Hz): {metrics['mid']:.2f}
+- High Frequency Energy (2000+ Hz): {metrics['high']:.2f}
 
-🌿 Peace Score: {metrics['peace']:.2f}/100
+🌿 Composite Peace Score: {metrics['peace']:.2f}/100
 
-=======================================================
+=====================================================
 
-🚨 STRICT INSTRUCTIONS:
+STRICT RULES:
+1. Predict the environment, not just the noise level.
+2. Give a probability breakdown across likely environments; the probabilities must sum to 100%.
+3. For every predicted environment, explain the exact metric evidence used to infer it.
+4. Mention counter-evidence too: explain why alternative environments are less likely.
+5. Use real-world environment labels such as:
+   - quiet room
+   - office
+   - home interior
+   - traffic road
+   - vehicle cabin
+   - construction site
+   - fan / AC room
+   - crowd / public place
+   - nature / outdoor calm
+   - industrial / machinery area
+   - café / restaurant
+   - classroom / meeting room
+6. Be concrete. Do not say vague things like “some noise is present”.
+7. Do not claim certainty unless the evidence is extremely strong.
+8. If the metrics suggest ambiguity, say so clearly and explain the ambiguity.
+9. Do not mention internal reasoning. Give the final evidence-based explanation only.
 
-- DO NOT be generic
-- DO NOT repeat numbers without meaning
-- ALWAYS explain WHAT the numbers imply in real life
-- Use real-world analogies (traffic, AC, office, nature, etc.)
-- Be confident and specific
+==================== REQUIRED OUTPUT FORMAT ====================
 
-=======================================================
+## 1. Predicted Environment
+Give the most likely environment category and a short one-line summary.
 
-🎯 OUTPUT FORMAT (MANDATORY):
+## 2. Probability Breakdown
+Provide 3 to 5 likely environments with probabilities that sum to 100%.
+Example:
+- Traffic road — 45%
+- Vehicle cabin — 25%
+- Office — 15%
+- Fan / AC room — 10%
+- Quiet indoor room — 5%
 
-## 🧠 1. Environment Classification
-- Identify environment (e.g., quiet room, traffic road, office, construction, nature)
-- Give probability breakdown (e.g., 70% traffic, 20% human, 10% machinery)
+## 3. Why This Prediction Was Made
+For each environment in the probability breakdown, explain:
+- which metrics support it
+- what those metrics mean in real-world sound terms
+- why it is more or less likely than the others
 
-## 🔊 2. Noise Behavior Analysis
-- Explain:
-  - Is it steady or fluctuating?
-  - Are there sudden spikes?
-  - Is it tonal (fan/AC) or random (crowd)?
+You must explicitly connect conclusions to metrics such as:
+- dB and RMS for loudness
+- Peak and Crest Factor for sudden spikes / impulsive events
+- Kurtosis for shock-like events such as honks or slams
+- Skewness for asymmetry in sound distribution
+- ZCR for sharp or noisy behavior
+- Spectral Centroid for brightness / hiss / high-frequency dominance
+- Bandwidth for spread of frequencies
+- Low / Mid / High energy for likely source type
 
-## 👂 3. Human Comfort & Perception
-- How a human would FEEL in this environment
-- Is it relaxing, distracting, stressful?
+## 4. Noise Characterization
+Explain the sound in practical terms:
+- steady or fluctuating
+- tonal or random
+- sharp or dull
+- impulsive or continuous
+- low-frequency heavy or high-frequency heavy
+- human-voice-like or machinery-like or nature-like
 
-## ⚠️ 4. Risk & Health Impact
-- Safe / Moderate / Harmful
-- Long exposure impact (focus, hearing, stress)
+## 5. Human Comfort & Perception
+Explain how a typical person would perceive this environment:
+- calm / moderate / distracting / stressful / harsh
+- likely effect on concentration, comfort, and fatigue
 
-## 😖 5. Irritation & Annoyance Level
-- Score from 1–10
-- Explain WHY
+## 6. Risk / Impact Assessment
+Classify the environment as:
+- Quiet
+- Moderate
+- Noisy
+- Potentially harmful
 
-## 🔍 6. Key Observations (Important)
-- Highlight 3–5 critical insights from the data
+Also explain likely long-exposure impact:
+- focus
+- stress
+- hearing comfort
+- annoyance
+- fatigue
 
-## 💡 7. Improvement Recommendations
-- Practical steps (soundproofing, white noise, relocation, etc.)
+## 7. Key Metric-to-Meaning Mapping
+Provide a point-by-point table or bullet list that maps:
+- metric value → interpretation → what it suggests about the environment
 
-## 🏁 8. Final Verdict
-- 2–3 line strong professional conclusion
+Example style:
+- High high-frequency energy → hiss / alarms / speech / traffic texture → suggests traffic, crowd, machinery, or outdoor noise
+- High low-frequency energy → engine / AC / fan / vehicle hum → suggests vehicle cabin, traffic, industrial room, or AC room
 
-=======================================================
+## 8. Practical Recommendations
+Give specific, useful advice based on the inferred environment:
+- if it is a room: soundproofing / fan placement / window sealing
+- if it is outdoors: expected source and mitigation
+- if it is a vehicle: cabin noise expectations
+- if it is a workplace: acoustic comfort improvements
+
+## 9. Final Verdict
+End with a strong 2–3 sentence conclusion that states:
+- the most likely environment
+- the confidence level
+- the main evidence behind the prediction
+
+STYLE REQUIREMENTS:
+- Use clear headings
+- Use concise but detailed explanations
+- Be precise and helpful
+- Make it feel like a premium AI acoustic report
+- Avoid boilerplate language
 """
+prompt = f"""
+Context: This is an environment sound analysis app. The goal is to predict the environment category from audio features and explain the prediction with metric-based evidence.
 
+{prompt}
+"""
     completion = client.chat.completions.create(
         model=LLM_MODEL,
         messages=[{"role": "user", "content": prompt}],
