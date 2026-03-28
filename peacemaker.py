@@ -256,16 +256,6 @@ For each environment in the probability breakdown, explain:
 - what those metrics mean in real-world sound terms
 - why it is more or less likely than the others
 
-You must explicitly connect conclusions to metrics such as:
-- dB and RMS for loudness
-- Peak and Crest Factor for sudden spikes / impulsive events
-- Kurtosis for shock-like events such as honks or slams
-- Skewness for asymmetry in sound distribution
-- ZCR for sharp or noisy behavior
-- Spectral Centroid for brightness / hiss / high-frequency dominance
-- Bandwidth for spread of frequencies
-- Low / Mid / High energy for likely source type
-
 ## 4. Noise Characterization
 Explain the sound in practical terms:
 - steady or fluctuating
@@ -315,6 +305,16 @@ End with a strong 2–3 sentence conclusion that states:
 - the confidence level
 - the main evidence behind the prediction
 
+You must explicitly connect conclusions to metrics such as:
+- dB and RMS for loudness
+- Peak and Crest Factor for sudden spikes / impulsive events
+- Kurtosis for shock-like events such as honks or slams
+- Skewness for asymmetry in sound distribution
+- ZCR for sharp or noisy behavior
+- Spectral Centroid for brightness / hiss / high-frequency dominance
+- Bandwidth for spread of frequencies
+- Low / Mid / High energy for likely source type
+
 STYLE REQUIREMENTS:
 - Use clear headings
 - Use concise but detailed explanations
@@ -330,7 +330,7 @@ Context: This is an environment sound analysis app. The goal is to predict the e
     completion = client.chat.completions.create(
         model=LLM_MODEL,
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=700,
+        max_tokens=2000,
     )
 
     return completion.choices[0].message.content
